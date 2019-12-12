@@ -54,7 +54,6 @@ def getData(country):
     return df
 
 
-
 def selectSpecies(speciesArray, DF):
     '''
     Extract the selected species from the dataframe and save the requested audios in a separate folder.
