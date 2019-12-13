@@ -7,6 +7,7 @@ for input in $(ls '../dataset/recordings/stage-1' | egrep '\.mp3$')
    done 
 
 
+# Parar todos a mono para que tengan 1 sólo canal
 # Añadir gain 10 para subir el volumen?
 # Subir frecuencia en el lowpass?
 # También podría añadir un highpass...

@@ -73,6 +73,6 @@ def selectSpecies(speciesArray, DF):
             shutil.copy(f'./dataset/recordings/{file}', './dataset/recordings/stage-1')
     indexsSelected = [i for i in range(len(DFunique)) if DFunique['id'].iloc[i] in selectedIds]
     finalDF = DFunique.iloc[indexsSelected]
-    finalDF.to_csv(f'./dataset/birds_spain_selected.csv', index=False)
+    finalDF.to_csv('./dataset/birds_spain_selected.csv', index=False)
     return finalDF
 
