@@ -7,6 +7,7 @@ import re
 import numpy as np
 import pandas as pd
 from scipy.fftpack import fft
+from librosa.feature import mfcc
 
 
 def splitOnSilence(filepath):
@@ -23,6 +24,17 @@ def splitOnSilence(filepath):
     # Don't keep silence at the beginning and end of the chunk
     keep_silence=0)
     return chunks
+
+
+def fourierCoefficients(sample):
+    fft_mod = np.abs(fft(sample,512)) # probar np.log
+    fft_mod = fft_mod[0:len(fft_mod)//2]
+    return fft_mod
+
+
+def mfccCoefficients(sample):
+    mels = np.mean(mfcc(y=np.array([float(e) for e in sample]), sr=len(sample), n_mfcc=128).T, axis=0)
+    return mels
 
 
 def windowsDF(filespath):
@@ -55,35 +67,21 @@ def windowsDF(filespath):
                         # window = window.set_frame_rate(48000) # I can change array's length with this (48000 for convention...)
                         # Get array from each window:
                         sample = window.get_array_of_samples()
-                        # Check if window has a minimum of amplitude:
+                        # Check if window has at least a determined amplitude:
                         if np.max(sample) > 1500:
                             # Fourier:
-                            fft_mod = np.abs(fft(sample,512))
-                            fft_mod = fft_mod[0:len(fft_mod)//2]
-                            # Mels:
-                            # ...
+                            fft_mod = fourierCoefficients(sample)
+                            # MFCC:
+                            mels = mfccCoefficients(sample)
                              # Array of dictionaries:
-                            windowsList.append({'class':species,'id':fileID,'sound':sample,'fourier':fft_mod,'mfcc':0})
+                            windowsList.append({'class':species,'id':fileID,'sound':sample,'fourier':fft_mod,'mfcc':mels})
     DF = pd.DataFrame(windowsList)
-    DF.to_pickle('./dataset/featuresDF.pkl', index=False)
+    DF = DF[['class','id','sound','fourier','mfcc']]
+    # DF['combined'] = [np.concatenate([DF.sound[i], DF.fourier[i], DF.mfcc[i]]) for i in range(len(DF))]
+    DF['combined'] = [np.concatenate([DF.fourier[i], DF.mfcc[i]]) for i in range(len(DF))]
+    DF.to_pickle('./dataset/featuresDF.pkl')
     return DF
-
 
 
 # El dataframe tiene que estar balanceado (más o menos el mismo número de muestras en cada clase)
 
-
-
-# AudioSegment(…).get_array_of_samples()
-# Returns the raw audio data as an array of (numeric) samples. Note: if the audio has multiple channels,
-#  the samples for each channel will be serialized – for example, stereo audio would look like 
-# [sample_1_L, sample_1_R, sample_2_L, sample_2_R, …].
-
-# AudioSegment(…).set_channels()
-# Creates an equivalent version of this AudioSegment with the specified number of channels 
-# (1 is Mono, 2 is Stereo). Converting from mono to stereo does not cause any audible change. 
-# Converting from stereo to mono may result in loss of quality (but only if the left and right chanels differ).
-
-# AudioSegment(…).split_to_mono()
-# Splits a stereo AudioSegment into two, one for each channel (Left/Right). Returns a list with the new
-#  AudioSegment objects with the left channel at index 0 and the right channel at index 1.
