@@ -37,7 +37,7 @@ def mfccCoefficients(sample):
     return mels
 
 
-def windowsDF(filespath):
+def featuresPipeline(filespath):
     '''
     For all tracks in filespath:
     - Separates out silent chunks.

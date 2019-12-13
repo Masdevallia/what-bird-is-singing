@@ -4,10 +4,10 @@ from src.getData import *
 
 # Get data:
 
-DF = getData('spain')
+df = getData('spain')
 speciesArray = ['European Robin', 'Iberian Green Woodpecker', 'Little Egret', 'Northern Raven']
-DF_selected = selectSpecies(speciesArray, DF)
+df_selected = selectSpecies(speciesArray, df)
 
-# DF = pd.read_csv('./dataset/birds_spain.csv')
-# DF_selected = pd.read_csv('./dataset/birds_spain_selected.csv')
+# df = pd.read_csv('./dataset/birds_spain.csv')
+# df_selected = pd.read_csv('./dataset/birds_spain_selected.csv')
 
