@@ -1,30 +1,13 @@
 
-from os import listdir
-from os.path import isfile, join
-import re
-from src.audioProcessing import splitOnSilence
-
+from src.audioProcessing import *
 
 # Applying low pass filter + noise gate:
 import subprocess
 subprocess.call(['./src/audioProcessing.sh'])
 
-# split_on_silence function for separating out silent chunks:
-mypath = './dataset/recordings/stage-1/converted'
-files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
-for i,file in enumerate(files):
-    fileID = int(re.findall('[0-9]+.',file)[0][:-1])
-    chunks = splitOnSilence(f'{mypath}/{file}')
-    print(f'Splitting {file}: file {i+1} out of {len(files)}')
-    for chunk in chunks:
-        # Define windows with overlap
-        # ...
-        # For each window:      
-        sample = window.get_array_of_samples()
+# Separating out silent chunks and split each remaining chunk into 1 second windows overlapping by 50%.
 
-# split each clip into 1 second windows overlapping by 50%.
-
-
+windowsDF('./dataset/recordings/stage-1/converted')
 
 
 
