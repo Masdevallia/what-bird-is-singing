@@ -1,3 +1,1 @@
 # What bird is singing?
-
-...
