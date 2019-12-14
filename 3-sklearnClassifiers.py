@@ -53,12 +53,12 @@ for modelName, model in models.items():
                           'recall': round(recall_score(y_test, y_pred, average='weighted'),2)}
 
 # Without balancing data:
-#{'LogisticRegression': {'accuracy': 0.57},
-# 'SVC': {'accuracy': 0.52},
-# 'KNeighborsClassifier': {'accuracy': 0.59},
-# 'RandomForestClassifier': {'accuracy': 0.9},
-# 'DecisionTreeClassifier': {'accuracy': 0.77},
-# 'GradientBoostingClassifier': {'accuracy': 0.93}}
+#{'LogisticRegression': {'accuracy': 0.57, 'precision': 0.54, 'recall': 0.57},
+# 'SVC': {'accuracy': 0.52, 'precision': 0.49, 'recall': 0.52},
+# 'KNeighborsClassifier': {'accuracy': 0.6, 'precision': 0.61, 'recall': 0.6},
+# 'RandomForestClassifier': {'accuracy': 0.88,'precision': 0.9,'recall': 0.88},
+# 'DecisionTreeClassifier': {'accuracy': 0.78,'precision': 0.78,'recall': 0.78},
+# 'GradientBoostingClassifier': {'accuracy': 0.92,'precision': 0.92,'recall': 0.92}}
 
 # Balancing data:
 #{'LogisticRegression': {'accuracy': 0.44},
