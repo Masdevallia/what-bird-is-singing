@@ -121,16 +121,38 @@ print(clf.best_params_)
 
 #.......................................................................................
 
+import h2o
+from h2o.automl import H2OAutoML
+h2o.init(nthreads = -1, max_mem_size = 6)
+DF = pd.DataFrame(X, columns=[f'fm{e}' for e in range(1,385)])
+DF['class'] = y
+hf = h2o.H2OFrame(DF)
+y_columns = 'class'
+# Fitting models (AutoML):
+aml_ti = H2OAutoML(max_models= 10, seed= 1, nfolds=5, sort_metric='RMSE')
+aml_ti.train(y = y_columns, training_frame = hf) # x = x_columns
+lb_ti = aml_ti.leaderboard
+print(aml_ti.leader)
+# pred = aml_ti.leader.predict()
+# save the model
+model_path = h2o.save_model(model=aml_ti, path="./models", force=True)
+# load the model
+# saved_model = h2o.load_model('./models')
+h2o.cluster().shutdown()
+
+#.......................................................................................
+
 # https://stackabuse.com/scikit-learn-save-and-restore-models/
 from sklearn.externals import joblib
-# Save to file in the current working directory
-joblib_file = "GradientBoostingClassifier.pkl"
+# Save to file
+# joblib_file = "GradientBoostingClassifier.pkl"
+joblib_file = "./models/GradientBoostingClassifier.pkl"
 joblib.dump(clf, joblib_file)
 # Load from file
-joblib_model = joblib.load(joblib_file)
-# Calculate the accuracy and predictions
+# joblib_model = joblib.load(joblib_file)
+joblib_model = joblib.load("./models/GradientBoostingClassifier.pkl")
+# Calculate the accuracy and make predictions
 score = joblib_model.score(X_test, y_test)
-print("Test score: {0:.2f} %".format(100 * score))
 Ypredict = joblib_model.predict(X_test)
 
 #.......................................................................................
