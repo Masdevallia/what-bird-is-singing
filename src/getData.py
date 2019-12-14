@@ -54,7 +54,7 @@ def getData(country):
     return df
 
 
-def selectSpecies(speciesArray, DF):
+def selectSpecies(speciesArray, DF, stage):
     '''
     Extract the selected species from the dataframe and save the requested audios in a separate folder.
     Returns the cleaned dataframe.
@@ -66,13 +66,15 @@ def selectSpecies(speciesArray, DF):
     for e in speciesArray:
         selectedIds.append(list(DFunique.id[DFunique.en==e]))
     selectedIds = [item for sublist in selectedIds for item in sublist]
-    mypath = './dataset/recordings'
+    # mypath = './dataset/recordings'
+    mypath = 'D:/Ironhack/Recordings'
     files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
     for file in files:
         if int(re.findall('[0-9]+.',file)[0][:-1]) in selectedIds:
-            shutil.copy(f'./dataset/recordings/{file}', './dataset/recordings/stage-1')
+            # shutil.copy(f'./dataset/recordings/{file}', f'./dataset/recordings/stage-{stage}')
+            shutil.copy(f'D:/Ironhack/Recordings/{file}', f'./dataset/recordings/stage-{stage}')
     indexsSelected = [i for i in range(len(DFunique)) if DFunique['id'].iloc[i] in selectedIds]
     finalDF = DFunique.iloc[indexsSelected]
-    finalDF.to_csv('./dataset/birds_spain_selected.csv', index=False)
+    finalDF.to_csv(f'./dataset/birds_spain_selected_{stage}.csv', index=False)
     return finalDF
 

@@ -37,7 +37,7 @@ def mfccCoefficients(sample):
     return mels
 
 
-def featuresPipeline(filespath):
+def featuresPipeline(filespath, stage):
     '''
     For all tracks in filespath:
     - Separates out silent chunks.
@@ -50,8 +50,7 @@ def featuresPipeline(filespath):
     '''
     windowsList = []
     files = [f for f in listdir(filespath) if isfile(join(filespath, f))]
-    for i,file in enumerate(files):
-    # for i,file in enumerate(files[:1]):    
+    for i,file in enumerate(files):  
         fileID = int(re.findall(r'[0-9]+.',file)[0][:-1])
         species = re.findall(r'\w+-\w+_',file)[0][:-1]
         # Get one track and split it where the silence is 0.1 seconds or more.
@@ -65,10 +64,10 @@ def featuresPipeline(filespath):
                 for i in range(0,len(chunk),overlap):
                     if i+windowLen <= len(chunk):
                         window = chunk[i:i+windowLen]
-                        # window = window.set_frame_rate(48000) # I can change array's length with this (48000 for convention...)
+                        # window = window.set_frame_rate(48000) # I can change array's length with this (48000 for convention)
                         # Get array from each window:
                         sample = window.get_array_of_samples()
-                        sample_np = np.array(sample.tolist(), dtype=np.float64)
+                        # sample_np = np.array(sample.tolist(), dtype=np.float64)
                         # Check if window has at least a determined amplitude:
                         if np.max(sample) > 1500:
                             # Fourier:
@@ -76,10 +75,20 @@ def featuresPipeline(filespath):
                             # MFCC:
                             mels = mfccCoefficients(sample)
                              # Array of dictionaries:
-                            windowsList.append({'class':species,'id':fileID,'sound':sample_np,'fourier':fft_mod,'mfcc':mels})
+                            # windowsList.append({'class':species,'id':fileID,'sound':sample_np,'fourier':fft_mod,'mfcc':mels})
+                            windowsList.append({'class':species,'id':fileID,'fourier':fft_mod,'mfcc':mels})
     DF = pd.DataFrame(windowsList)
-    DF = DF[['class','id','sound','fourier','mfcc']]
+    # DF = DF[['class','id','sound','fourier','mfcc']] 
+    DF = DF[['class','id','fourier','mfcc']]
     # DF['fourier_mfcc'] = [np.concatenate([DF.fourier[i], DF.mfcc[i]]) for i in range(len(DF))]
     # DF['sound-fourier_mfcc'] = [np.concatenate([DF.sound[i], DF.fourier[i], DF.mfcc[i]]) for i in range(len(DF))]
-    DF.to_pickle('./dataset/featuresDF.pkl')
-    return DF
+    
+    # Balancing data:
+    DFBalanced = DF.groupby('class')
+    DFBalanced = pd.DataFrame(DFBalanced.apply(
+                     lambda x: x.sample(DFBalanced.size().min()).reset_index(drop=True)))
+        
+    DFBalanced.to_pickle(f'./dataset/featuresDF_{stage}.pkl')
+    return DFBalanced
+    # DF.to_pickle(f'./dataset/featuresDF_{stage}.pkl')
+    # return DF
