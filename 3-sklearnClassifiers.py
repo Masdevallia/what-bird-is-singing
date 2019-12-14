@@ -10,14 +10,22 @@ from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
 
-# featuresDf = pd.read_pickle('./dataset/featuresDF.pkl')
-featuresDf = pd.read_pickle('./dataset/featuresDF_2.pkl')
+
+featuresDf = pd.read_pickle('./dataset/featuresDF.pkl')
+
+featuresDf['fourier_mfcc'] = [np.concatenate([featuresDf.fourier[i],
+                              featuresDf.mfcc[i]]) for i in range(len(featuresDf))]
+
+featuresDf['sound-fourier_mfcc'] = [np.concatenate([featuresDf.sound[i],
+                                    featuresDf.fourier[i],
+                                    featuresDf.mfcc[i]]) for i in range(len(featuresDf))]
+                                  
 
 # El dataframe tiene que estar balanceado (más o menos el mismo número de muestras en cada clase)
 
 #.......................................................................................
 
-# Fourier+MFCC:
+# Fourier+MFCC:                        
 
 X = np.array(featuresDf['fourier_mfcc'].tolist())
 y = np.array(featuresDf['class'].tolist())
@@ -75,7 +83,10 @@ X = np.array(featuresDf['fourier'].tolist())
 
 # Sound:
 
+X = np.array(featuresDf['sound'].tolist())
 
 #.......................................................................................
 
 # Sound+Fourier+MFCC:
+
+X = np.array(featuresDf['sound-fourier_mfcc'].tolist())
