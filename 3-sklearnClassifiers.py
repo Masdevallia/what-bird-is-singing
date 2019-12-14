@@ -8,7 +8,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score
 
 featuresDf = pd.read_pickle('./dataset/featuresDF.pkl')
 
@@ -48,7 +48,9 @@ metrics = {}
 for modelName, model in models.items():
     clf = model.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
-    metrics[modelName] = {'accuracy': round(accuracy_score(y_test, y_pred),2)}
+    metrics[modelName] = {'accuracy': round(accuracy_score(y_test, y_pred),2),
+                          'precision': round(precision_score(y_test, y_pred, average='weighted'),2),
+                          'recall': round(recall_score(y_test, y_pred, average='weighted'),2)}
 
 # Without balancing data:
 #{'LogisticRegression': {'accuracy': 0.57},
