@@ -77,11 +77,10 @@ def featuresPipeline(filespath):
                             windowsList.append({'class':species,'id':fileID,'sound':sample,'fourier':fft_mod,'mfcc':mels})
     DF = pd.DataFrame(windowsList)
     DF = DF[['class','id','sound','fourier','mfcc']]
-    # DF['combined'] = [np.concatenate([DF.sound[i], DF.fourier[i], DF.mfcc[i]]) for i in range(len(DF))]
-    DF['combined'] = [np.concatenate([DF.fourier[i], DF.mfcc[i]]) for i in range(len(DF))]
-    DF.to_pickle('./dataset/featuresDF.pkl')
+    # DF['sound'] = [np.asarray(DF.sound[i].tolist()) for i in range(len(DF))]
+    DF['fourier_mfcc'] = [np.concatenate([DF.fourier[i], DF.mfcc[i]]) for i in range(len(DF))]
+    # DF['allCombined'] = [np.concatenate([DF.soundnp[i], DF.fourier[i], DF.mfcc[i]]) for i in range(len(DF))]
+    DF.to_pickle('./dataset/featuresDF_2.pkl')
     return DF
 
-
-# El dataframe tiene que estar balanceado (más o menos el mismo número de muestras en cada clase)
 
