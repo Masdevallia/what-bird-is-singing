@@ -23,8 +23,12 @@ featuresDf['fourier_mfcc'] = [np.concatenate([featuresDf.fourier[i],
 
 X = np.array(featuresDf['fourier_mfcc'].tolist())
 y = np.array(featuresDf['class'].tolist())
+
+# Mapping the string class values to integer values using a LabelEncoder.
 lb = LabelEncoder()
 y = np_utils.to_categorical(lb.fit_transform(y))
+np.save('./models/classes.npy', lb.classes_)
+
 print(X.shape) # (11063, 384)
 print(y.shape) # (11063, 4)
 
