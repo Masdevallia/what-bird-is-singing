@@ -9,7 +9,6 @@ from sklearn import metrics
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from keras.layers.normalization import BatchNormalization
-from keras.models import model_from_json
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 
 #.............................................................................................
@@ -27,8 +26,8 @@ val_y = np.array(df_val['class'].tolist())
 lb = LabelEncoder()
 y = np_utils.to_categorical(lb.fit_transform(y))
 val_y = np_utils.to_categorical(lb.fit_transform(val_y))
-# print(X.shape) # (9352, 384)
-# print(y.shape) # (9352, 4)
+# print(X.shape) 
+# print(y.shape) 
 
 #.............................................................................................
 
@@ -81,7 +80,6 @@ print('Test accuracy:', score[1])
 #.............................................................................................
 
 # Save the to disk so we can load it back up anytime:
-
 model.save('./models/nn_model_0.66_0.80.h5')
 
 # serialize the model to JSON
@@ -94,18 +92,3 @@ model.save_weights("./models/nn_weights_0.66_0.80.h5")
 
 print('Model saved')
 
-#.............................................................................................
- 
-# We can now reload the trained model whenever we want by rebuilding it and loading in the saved weights:
- 
-# load json and create the model
-json_file = open('./models/nn_model_0.66_0.80.json', 'r')
-loaded_model_json = json_file.read()
-json_file.close()
-loaded_model = model_from_json(loaded_model_json)
-# load weights to the new model
-loaded_model.load_weights("./models/nn_weights_0.66_0.80.h5")
-print("Cargado modelo desde disco.")
- 
-# Compile the loaded and ready to use model
-loaded_model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='adam')

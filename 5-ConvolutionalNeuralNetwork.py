@@ -6,7 +6,6 @@ from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Dropout, Activati
 from keras.optimizers import Adam
 from keras.utils import np_utils
 from keras.layers.normalization import BatchNormalization
-from keras.models import model_from_json
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 from sklearn import metrics
 from sklearn.preprocessing import LabelEncoder
@@ -90,14 +89,12 @@ print('Test accuracy:', score[1])
 #.............................................................................................
 
 # Save the to disk so we can load it back up anytime:
-
 model.save('./models/cnn_model_epoch2500_loss0.15_accuracy0.95.h5')
 
 # serialize the model to JSON
 model_json = model.to_json()
 with open("./models/cnn_model_epoch2500_loss0.15_accuracy0.95.json", "w") as json_file:
     json_file.write(model_json)
-
 # serialize weights to HDF5
 model.save_weights("./models/cnn_model_epoch2500_loss0.15_accuracy0.95_weights.h5")
 
@@ -127,8 +124,4 @@ plt.xlabel('Epoch')
 plt.legend(['Train', 'Test'], loc='upper left')
 # plt.show()
 plt.savefig('./charts/cnn_lossvalues.png', dpi=300, bbox_inches='tight')
-
-#.............................................................................................
-
-# We can now reload the trained model whenever we want by rebuilding it and loading in the saved weights:
 
