@@ -20,7 +20,7 @@ featuresDf = pd.read_pickle('./dataset/featuresDF_1_LN.pkl')
 
 featuresDf['fourier_mfcc'] = [np.concatenate([featuresDf.fourier[i],
                               featuresDf.mfcc[i]]) for i in range(len(featuresDf))]
-                     
+
 X = np.array(featuresDf['fourier_mfcc'].tolist())
 y = np.array(featuresDf['class'].tolist())
 X_train, X_test, y_train, y_test = train_test_split(X,y,train_size=0.2)
@@ -82,11 +82,12 @@ parameters = {
     'n_estimators': [300, 500, 700],
     'learning_rate' :[0.3, 0.5]}
 gbc = GradientBoostingClassifier() 
-clf = GridSearchCV(gbc, parameters, cv=5, scoring='accuracy', verbose=5) # n_jobs= -1
+clf = GridSearchCV(gbc, parameters, cv=5, scoring='accuracy', verbose=5, n_jobs= -1)
 clf.fit(X, y)
 print(clf.best_estimator_)
 print(clf.best_score_) 
 print(clf.best_params_)
+# GridSearchCV refits an estimator using the best found parameters on the whole dataset.
 
 #.......................................................................................
 
@@ -137,5 +138,4 @@ windowPredictions = Counter(prediction)
 # Finally, it returns the species that appears more times:
 max_key = max(windowPredictions, key=lambda x: windowPredictions[x])
 print(max_key)
-
 
