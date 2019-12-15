@@ -88,7 +88,7 @@ def featuresPipeline(filespath, stage):
     DFBalanced = pd.DataFrame(DFBalanced.apply(
                      lambda x: x.sample(DFBalanced.size().min()).reset_index(drop=True)))
         
-    DFBalanced.to_pickle(f'./dataset/featuresDF_{stage}.pkl')
+    DFBalanced.to_pickle(f'./dataset/featuresDF_{stage}_balanced.pkl')
+    DF.to_pickle(f'./dataset/featuresDF_{stage}.pkl')
     return DFBalanced
-    # DF.to_pickle(f'./dataset/featuresDF_{stage}.pkl')
     # return DF
