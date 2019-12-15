@@ -80,14 +80,16 @@ print('Test accuracy:', score[1])
 #.............................................................................................
 
 # Save the to disk so we can load it back up anytime:
+
+# Save model weights and architecture together:
 model.save('./models/nn_model_0.66_0.80.h5')
 
-# serialize the model to JSON
+# Serialize model architecture to JSON
 model_json = model.to_json()
 with open("./models/nn_model_0.66_0.80.json", "w") as json_file:
     json_file.write(model_json)
 
-# serialize weights to HDF5
+# Serialize weights to HDF5/H5
 model.save_weights("./models/nn_weights_0.66_0.80.h5")
 
 print('Model saved')

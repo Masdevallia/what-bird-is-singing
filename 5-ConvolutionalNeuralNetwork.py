@@ -89,18 +89,23 @@ print('Test accuracy:', score[1])
 #.............................................................................................
 
 # Save the to disk so we can load it back up anytime:
+
+# Save model weights and architecture together:
 model.save('./models/cnn_model_epoch2500_loss0.15_accuracy0.95.h5')
 
-# serialize the model to JSON
+# Serialize model architecture to JSON
 model_json = model.to_json()
 with open("./models/cnn_model_epoch2500_loss0.15_accuracy0.95.json", "w") as json_file:
     json_file.write(model_json)
-# serialize weights to HDF5
+
+# Serialize weights to HDF5/H5
 model.save_weights("./models/cnn_model_epoch2500_loss0.15_accuracy0.95_weights.h5")
 
 print('Model saved')
 
 #.............................................................................................
+
+# Evaluating overfitting:
 
 import matplotlib.pyplot as plt
 # %matplotlib inline
