@@ -84,11 +84,17 @@ def featuresPipeline(filespath, stage):
     # DF['sound-fourier_mfcc'] = [np.concatenate([DF.sound[i], DF.fourier[i], DF.mfcc[i]]) for i in range(len(DF))]
     
     # Balancing data:
+    # Checking if the dataframe is balanced (more or less the same number of samples in each class):
+    # for e in set(DF['class']):
+        # print(e, len(DF[DF['class'] == e]))
     DFBalanced = DF.groupby('class')
     DFBalanced = pd.DataFrame(DFBalanced.apply(
                      lambda x: x.sample(DFBalanced.size().min()).reset_index(drop=True)))
-        
+     
     DFBalanced.to_pickle(f'./dataset/featuresDF_{stage}_balanced_LN.pkl')
     DF.to_pickle(f'./dataset/featuresDF_{stage}_LN.pkl')
     return DFBalanced
     # return DF
+
+
+

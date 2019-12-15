@@ -11,17 +11,8 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 
 # featuresDf = pd.read_pickle('./dataset/featuresDF.pkl')
-featuresDf = pd.read_pickle('./dataset/featuresDF_2.pkl')
-
-#.......................................................................................                              
-
-# Checking if the dataframe is balanced (more or less the same number of samples in each class):
-# for e in set(featuresDf['class']):
-    # print(e, len(featuresDf[featuresDf['class'] == e]))
-# Fixing it:
-featuresDfBalanced = featuresDf.groupby('class')
-featuresDfBalanced = pd.DataFrame(featuresDfBalanced.apply(
-                     lambda x: x.sample(featuresDfBalanced.size().min()).reset_index(drop=True)))
+# featuresDf = pd.read_pickle('./dataset/featuresDF_2.pkl')
+featuresDf = pd.read_pickle('./dataset/featuresDF_1_LN.pkl')
 
 #.......................................................................................
 
@@ -32,8 +23,6 @@ featuresDf['fourier_mfcc'] = [np.concatenate([featuresDf.fourier[i],
                      
 X = np.array(featuresDf['fourier_mfcc'].tolist())
 y = np.array(featuresDf['class'].tolist())
-# X = np.array(featuresDfBalanced['fourier_mfcc'].tolist())
-# y = np.array(featuresDfBalanced['class'].tolist())
 X_train, X_test, y_train, y_test = train_test_split(X,y,train_size=0.2)
 
 # Model testing:
@@ -44,7 +33,6 @@ models = {'LogisticRegression': LogisticRegression(solver='lbfgs',multi_class='a
           'DecisionTreeClassifier': DecisionTreeClassifier(),
           'GradientBoostingClassifier': GradientBoostingClassifier()}
 
-# Scaled:
 metrics = {}
 for modelName, model in models.items():
     clf = model.fit(X_train, y_train)
@@ -53,59 +41,39 @@ for modelName, model in models.items():
                           'precision': round(precision_score(y_test, y_pred, average='weighted'),2),
                           'recall': round(recall_score(y_test, y_pred, average='weighted'),2)}
 
-# Without balancing data:
-#{'LogisticRegression': {'accuracy': 0.57, 'precision': 0.54, 'recall': 0.57},
-# 'SVC': {'accuracy': 0.52, 'precision': 0.49, 'recall': 0.52},
-# 'KNeighborsClassifier': {'accuracy': 0.6, 'precision': 0.61, 'recall': 0.6},
-# 'RandomForestClassifier': {'accuracy': 0.88,'precision': 0.9,'recall': 0.88},
-# 'DecisionTreeClassifier': {'accuracy': 0.78,'precision': 0.78,'recall': 0.78},
-# 'GradientBoostingClassifier': {'accuracy': 0.92,'precision': 0.92,'recall': 0.92}}
 
-# Balancing data:
-#{'LogisticRegression': {'accuracy': 0.44},
-# 'SVC': {'accuracy': 0.24},
-# 'KNeighborsClassifier': {'accuracy': 0.52},
-# 'RandomForestClassifier': {'accuracy': 0.83},
-# 'DecisionTreeClassifier': {'accuracy': 0.66},
-# 'GradientBoostingClassifier': {'accuracy': 0.85}}
+#{'LogisticRegression': {'accuracy': 0.55, 'precision': 0.52, 'recall': 0.55},
+# 'SVC': {'accuracy': 0.5, 'precision': 0.25, 'recall': 0.5},
+# 'KNeighborsClassifier': {'accuracy': 0.6, 'precision': 0.61, 'recall': 0.6},
+# 'RandomForestClassifier': {'accuracy': 0.88, 'precision': 0.89, 'recall': 0.88},
+# 'DecisionTreeClassifier': {'accuracy': 0.78, 'precision': 0.79, 'recall': 0.78},
+# 'GradientBoostingClassifier': {'accuracy': 0.92, 'precision': 0.92, 'recall': 0.92}}
 
 #.......................................................................................
 
 # MFCC:
 
 X = np.array(featuresDf['mfcc'].tolist())
-# X = np.array(featuresDfBalanced['mfcc'].tolist())
 
-# Without balancing data:
-#{'LogisticRegression': {'accuracy': 0.78},
-# 'SVC': {'accuracy': 0.58},
-# 'KNeighborsClassifier': {'accuracy': 0.93},
-# 'RandomForestClassifier': {'accuracy': 0.91},
-# 'DecisionTreeClassifier': {'accuracy': 0.77},
-# 'GradientBoostingClassifier': {'accuracy': 0.92}}
-
-# Balancing data:
-#{'LogisticRegression': {'accuracy': 0.71},
-# 'SVC': {'accuracy': 0.48},
-# 'KNeighborsClassifier': {'accuracy': 0.84},
-# 'RandomForestClassifier': {'accuracy': 0.86},
-# 'DecisionTreeClassifier': {'accuracy': 0.68},
-# 'GradientBoostingClassifier': {'accuracy': 0.85}}
+#{'LogisticRegression': {'accuracy': 0.78, 'precision': 0.78, 'recall': 0.78},
+# 'SVC': {'accuracy': 0.58, 'precision': 0.77, 'recall': 0.58},
+# 'KNeighborsClassifier': {'accuracy': 0.93, 'precision': 0.93, 'recall': 0.93},
+# 'RandomForestClassifier': {'accuracy': 0.91, 'precision': 0.92, 'recall': 0.91},
+# 'DecisionTreeClassifier': {'accuracy': 0.78, 'precision': 0.78, 'recall': 0.78},
+# 'GradientBoostingClassifier': {'accuracy': 0.92, 'precision': 0.92, 'recall': 0.92}}
 
 #.......................................................................................
 
 # Fourier:
 
 X = np.array(featuresDf['fourier'].tolist())
-# X = np.array(featuresDfBalanced['fourier'].tolist())
 
-# Without balancing data:
-#{'LogisticRegression': {'accuracy': 0.56},
-# 'SVC': {'accuracy': 0.52},
-# 'KNeighborsClassifier': {'accuracy': 0.61},
-# 'RandomForestClassifier': {'accuracy': 0.66},
-# 'DecisionTreeClassifier': {'accuracy': 0.55},
-# 'GradientBoostingClassifier': {'accuracy': 0.67}}
+#{'LogisticRegression': {'accuracy': 0.55, 'precision': 0.52, 'recall': 0.55},
+# 'SVC': {'accuracy': 0.5, 'precision': 0.25, 'recall': 0.5},
+# 'KNeighborsClassifier': {'accuracy': 0.6, 'precision': 0.6, 'recall': 0.6},
+# 'RandomForestClassifier': {'accuracy': 0.65, 'precision': 0.66, 'recall': 0.65},
+# 'DecisionTreeClassifier': {'accuracy': 0.53, 'precision': 0.53, 'recall': 0.53},
+# 'GradientBoostingClassifier': {'accuracy': 0.65, 'precision': 0.64, 'recall': 0.65}}
 
 #.......................................................................................
 

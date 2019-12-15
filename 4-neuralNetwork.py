@@ -2,8 +2,7 @@
 import pandas as pd
 import numpy as np
 from keras.models import Sequential
-from keras.layers import Dense, Dropout, Activation, Flatten
-from keras.layers import Convolution2D, MaxPooling2D
+from keras.layers import Dense, Dropout, Activation
 from keras.optimizers import Adam
 from keras.utils import np_utils
 from sklearn import metrics
@@ -15,7 +14,7 @@ from keras.callbacks import ModelCheckpoint, EarlyStopping
 
 #.............................................................................................
 
-print('Preparing the database.')
+print('Preparing the database')
 featuresDf = pd.read_pickle('./dataset/featuresDF.pkl')
 featuresDf['fourier_mfcc'] = [np.concatenate([featuresDf.fourier[i],
                               featuresDf.mfcc[i]]) for i in range(len(featuresDf))]
@@ -33,7 +32,7 @@ val_y = np_utils.to_categorical(lb.fit_transform(val_y))
 
 #.............................................................................................
 
-print('Building the Neural Network.')
+print('Building the Neural Network')
 
 filepath='./models/nn_checkpoint_{epoch:02d}_{val_loss:.2f}.hdf5'
 checkpointer = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True) # mode='max'
@@ -65,9 +64,9 @@ model.add(Activation('softmax'))
 model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='adam')
 # 'sparse_categorical_crossentropy'
 
-print('Training the Neural Network.')
+print('Training the Neural Network')
 model.fit(X, y, batch_size=512, epochs=500, validation_data=(val_x, val_y), callbacks=callbacks_list)
-print('Done.')
+print('Done')
 
 # val_loss: 0.6025 - val_accuracy: 0.7990
 
@@ -81,30 +80,32 @@ print('Test accuracy:', score[1])
 
 #.............................................................................................
 
+# Save the to disk so we can load it back up anytime:
+
 model.save('./models/nn_model_0.66_0.80.h5')
 
-# serializar el modelo a JSON
+# serialize the model to JSON
 model_json = model.to_json()
 with open("./models/nn_model_0.66_0.80.json", "w") as json_file:
     json_file.write(model_json)
 
-# serializar los pesos a HDF5
+# serialize weights to HDF5
 model.save_weights("./models/nn_weights_0.66_0.80.h5")
 
-print('Model saved.')
+print('Model saved')
 
 #.............................................................................................
  
-# Más tarde...
+# We can now reload the trained model whenever we want by rebuilding it and loading in the saved weights:
  
-# cargar json y crear el modelo
+# load json and create the model
 json_file = open('./models/nn_model_0.66_0.80.json', 'r')
 loaded_model_json = json_file.read()
 json_file.close()
 loaded_model = model_from_json(loaded_model_json)
-# cargar pesos al nuevo modelo
+# load weights to the new model
 loaded_model.load_weights("./models/nn_weights_0.66_0.80.h5")
 print("Cargado modelo desde disco.")
  
-# Compilar modelo cargado y listo para usar.
+# Compile the loaded and ready to use model
 loaded_model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='adam')
