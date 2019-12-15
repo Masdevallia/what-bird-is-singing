@@ -27,12 +27,18 @@ def splitOnSilence(filepath):
 
 
 def fourierCoefficients(sample):
+    '''
+    Calculates Fourier coefficients for each window.
+    '''
     fft_mod = np.abs(fft(sample,512)) # probar np.log
     fft_mod = fft_mod[0:len(fft_mod)//2]
     return fft_mod
 
 
 def mfccCoefficients(sample):
+    '''
+    Determines the average value of each mfcc coefficient for each window.
+    '''
     mels = np.mean(mfcc(y=np.array([float(e) for e in sample]), sr=len(sample), n_mfcc=128).T, axis=0)
     return mels
 
@@ -43,9 +49,9 @@ def featuresPipeline(filespath, stage):
     - Separates out silent chunks.
     - Splits each remaining chunk into 1 second windows overlapping by 50%.
     - Stores the windows' array in a dataframe.
-    - Calculates Fourier coefficients and stores them in the dataframe.
-    - Calculates Mels coefficients and stores them in the dataframe.
-    - Concatenates all features.
+    - Calculates Fourier coefficients for each window and stores them in the dataframe.
+    - Calculates Mels coefficients for each window and stores them in the dataframe.
+    - Balances data.
     - Returns the final dataframe.
     '''
     windowsList = []
@@ -78,11 +84,10 @@ def featuresPipeline(filespath, stage):
                             # windowsList.append({'class':species,'id':fileID,'sound':sample_np,'fourier':fft_mod,'mfcc':mels})
                             windowsList.append({'class':species,'id':fileID,'fourier':fft_mod,'mfcc':mels})
     DF = pd.DataFrame(windowsList)
-    # DF = DF[['class','id','sound','fourier','mfcc']] 
+    # DF = DF[['class','id','sound','fourier','mfcc']]
     DF = DF[['class','id','fourier','mfcc']]
     # DF['fourier_mfcc'] = [np.concatenate([DF.fourier[i], DF.mfcc[i]]) for i in range(len(DF))]
     # DF['sound-fourier_mfcc'] = [np.concatenate([DF.sound[i], DF.fourier[i], DF.mfcc[i]]) for i in range(len(DF))]
-    
     # Balancing data:
     # Checking if the dataframe is balanced (more or less the same number of samples in each class):
     # for e in set(DF['class']):
@@ -90,11 +95,8 @@ def featuresPipeline(filespath, stage):
     DFBalanced = DF.groupby('class')
     DFBalanced = pd.DataFrame(DFBalanced.apply(
                      lambda x: x.sample(DFBalanced.size().min()).reset_index(drop=True)))
-     
-    DFBalanced.to_pickle(f'./dataset/featuresDF_{stage}_balanced_LN.pkl')
+    # DFBalanced.to_pickle(f'./dataset/featuresDF_{stage}_balanced_LN.pkl')
     DF.to_pickle(f'./dataset/featuresDF_{stage}_LN.pkl')
-    return DFBalanced
-    # return DF
-
-
+    # return DFBalanced
+    return DF
 
