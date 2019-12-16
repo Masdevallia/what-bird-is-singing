@@ -1,10 +1,4 @@
 
-from src.audioProcessing import *
-from sklearn.preprocessing import LabelEncoder
-from collections import Counter
-import sys
-from keras.models import load_model
-
 import subprocess
 from flask import Flask, render_template, request
 
@@ -26,3 +20,4 @@ def Birdentifier():
 if __name__ == '__main__':
     app.run()
 
+# python3 application/start.py

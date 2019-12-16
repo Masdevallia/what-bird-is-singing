@@ -139,9 +139,9 @@ def testFeaturesPipeline(filespath, filename):
                                 # Array of dictionaries:
                                 # windowsList.append({'class':species,'id':fileID,'sound':sample_np,'fourier':fft_mod,'mfcc':mels})
                                 windowsList.append({'fourier':fft_mod,'mfcc':mels})
-        DF = pd.DataFrame(windowsList)
-        # DF = DF[['class','id','sound','fourier','mfcc']]
-        DF = DF[['fourier','mfcc']]
-        # DF['fourier_mfcc'] = [np.concatenate([DF.fourier[i], DF.mfcc[i]]) for i in range(len(DF))]
-        DF.to_pickle(f'./dataset/featuresDF_test_LN.pkl')
-        return DF
+            DF = pd.DataFrame(windowsList)
+            # DF = DF[['class','id','sound','fourier','mfcc']]
+            DF = DF[['fourier','mfcc']]
+            # DF['fourier_mfcc'] = [np.concatenate([DF.fourier[i], DF.mfcc[i]]) for i in range(len(DF))]
+            DF.to_pickle(f'./dataset/featuresDF_test_LN.pkl')
+            return DF

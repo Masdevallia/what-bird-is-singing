@@ -1,15 +1,13 @@
 
-
-# import subprocess
-# from src.audioProcessing import *
-# from sklearn.preprocessing import LabelEncoder
-# from collections import Counter
-# import sys
-# from keras.models import load_model
+from src.audioProcessing import *
+import subprocess
+from sklearn.preprocessing import LabelEncoder
+from collections import Counter
+import sys
+from keras.models import load_model
 
 # I will receive a filename from the application:
 filename = sys.argv[1]
-print(filename)
 
 # Audio processing:
 subprocess.run(['sh','./src/testAudioProcessing.sh'])
