@@ -5,6 +5,9 @@ from sklearn.preprocessing import LabelEncoder
 from collections import Counter
 import sys
 from keras.models import load_model
+import webbrowser
+
+#....................................................................................
 
 # I will receive a filename from the application:
 filename = sys.argv[1]
@@ -19,6 +22,8 @@ testFeaturesDf['fourier_mfcc'] = [np.concatenate([testFeaturesDf.fourier[i],
                               testFeaturesDf.mfcc[i]]) for i in range(len(testFeaturesDf))]
 X = np.array(testFeaturesDf['fourier_mfcc'].tolist())
 X = X.reshape(-1, 12, 32, 1)
+
+#....................................................................................
 
 # Load trained model:
 loaded_model = load_model('./models/cnn_model_final.h5')
@@ -50,4 +55,8 @@ finalPrediction = encoder.inverse_transform([max_key])[0]
 # so we can use np.argmax() to turn those into actual classes.
 # print(np.argmax(ynew, axis=1))
 
-print(finalPrediction)
+#....................................................................................
+
+answer = f'./application/output/{finalPrediction}.html'
+chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
+webbrowser.get(chrome_path).open(answer, 0)
