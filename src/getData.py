@@ -51,6 +51,7 @@ def getData(country):
     'also', 'bird-seen', 'type', 'url', 'file', 'file-name','length', 'lic','playback-used',
     'q','rec', 'rmk', 'sono', 'uploaded']]
     df.to_csv(f'./dataset/birds_{country}.csv', index=False)
+    df.to_json(f'./dataset/birds_{country}.json', orient="records")
     return df
 
 
@@ -76,5 +77,6 @@ def selectSpecies(speciesArray, DF, stage):
     indexsSelected = [i for i in range(len(DFunique)) if DFunique['id'].iloc[i] in selectedIds]
     finalDF = DFunique.iloc[indexsSelected]
     finalDF.to_csv(f'./dataset/birds_spain_selected_{stage}.csv', index=False)
+    finalDF.to_json(f'./dataset/birds_spain_selected_{stage}.json', orient="records")
     return finalDF
 

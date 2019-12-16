@@ -1,12 +1,15 @@
 
-import subprocess
-from src.audioProcessing import *
-from keras.models import load_model
-from sklearn.preprocessing import LabelEncoder
-from collections import Counter
+
+# import subprocess
+# from src.audioProcessing import *
+# from sklearn.preprocessing import LabelEncoder
+# from collections import Counter
+# import sys
+# from keras.models import load_model
 
 # I will receive a filename from the application:
-filename = 'Cc.mp3'
+filename = sys.argv[1]
+print(filename)
 
 # Audio processing:
 subprocess.run(['sh','./src/testAudioProcessing.sh'])
@@ -48,3 +51,5 @@ finalPrediction = encoder.inverse_transform([max_key])[0]
 # The output of our network is 4 probabilities (because of softmax),
 # so we can use np.argmax() to turn those into actual classes.
 # print(np.argmax(ynew, axis=1))
+
+print(finalPrediction)

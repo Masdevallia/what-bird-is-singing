@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+	<meta charset=utf-8>
+	<title>Birdentifier</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+	
+<body>
+	<!-- <h1>Birdentifier</h1> -->
+	<img src="https://i.ibb.co/SPxcfJg/titulo4.png" width="500"/> 
+	<h2>What bird is singing?</h2> 
+
+	<form action="http://localhost:5000/Birdentifier" method="post">
+
+		<div class="fieldset">
+
+			<ul style="list-style: none;">
+			<li style="padding: 10px;">
+
+			<div class="set">
+				<h4 class="legend">
+					Upload audio			
+				</h4>
+
+				<div class="upload-box">
+					<img src="https://res.cloudinary.com/dtutqsucw/image/upload/v1438955603/file-upload-01.png" alt="upload-file" width="90"/>
+					<p><font color="white" font size = 3>.</font></p>
+					<p class="file-type-desc"><font color="tomato">* </font>file extension allowed: <strong><font color="tomato">.mp3</font></strong></p>
+					<p class="file-type-desc"><font color="tomato">* </font>maximum file size: <strong><font color="tomato">5<font size = 2>MB</font></font></strong></p>  
+					<br><br><br>
+
+					<div class="browse-button">
+						<input type="file" name="filename" id="filename" accept="audio/*"></input>
+					</div>			
+
+					<script>
+						function myFunction() {
+							var x = document.getElementById("filename").value;}
+					</script>
+
+					<p><font color="white" font size = 5>.</font></p>
+				</div>
+				
+			</div>
+
+		</div>		
+
+		<br>
+		<button class="form-upload-button">
+			<p><font color="#44B1FA" font size = 2>.</font></p>
+			<img src="https://res.cloudinary.com/dtutqsucw/image/upload/v1438960670/file-upload.png"/ class="animated slideInUp">
+			<p>Submit</p>
+			<input type="submit" style="opacity: 0;"></input>
+		</button>
+
+	</form>	
+
+</body>
+
+</html>
