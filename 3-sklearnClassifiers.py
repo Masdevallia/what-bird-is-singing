@@ -89,6 +89,19 @@ print(clf.best_score_)
 print(clf.best_params_)
 # GridSearchCV refits an estimator using the best found parameters on the whole dataset.
 
+# GradientBoostingClassifier(criterion='friedman_mse', init=None,
+                           # learning_rate=0.1, loss='deviance', max_depth=3,
+                           # max_features=None, max_leaf_nodes=None,
+                           # min_impurity_decrease=0.0, min_impurity_split=None,
+                           # min_samples_leaf=1, min_samples_split=2,
+                           # min_weight_fraction_leaf=0.0, n_estimators=400,
+                           # n_iter_no_change=None, presort='auto',
+                           # random_state=None, subsample=1.0, tol=0.0001,
+                           # validation_fraction=0.1, verbose=0,
+                           # warm_start=False)
+# 0.7905631383892253
+# {'learning_rate': 0.1, 'n_estimators': 400}
+
 #.......................................................................................
 
 import h2o
