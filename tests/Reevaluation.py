@@ -9,7 +9,7 @@ from keras.models import model_from_json, load_model
 # We can now reload the trained model whenever we want by rebuilding it and loading
 # in the saved weights:
 
-featuresDf = pd.read_pickle('./dataset/featuresDF_1_LN.pkl')
+featuresDf = pd.read_pickle('./dataset/featuresDF_1.pkl')
 featuresDf['fourier_mfcc'] = [np.concatenate([featuresDf.fourier[i],
                               featuresDf.mfcc[i]]) for i in range(len(featuresDf))]
 df_t, df_val = train_test_split(featuresDf, test_size=0.2)

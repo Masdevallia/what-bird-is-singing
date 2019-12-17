@@ -14,8 +14,7 @@ from sklearn.model_selection import train_test_split
 #.............................................................................................
 
 print('Preparing the database')
-# featuresDf = pd.read_pickle('./dataset/featuresDF.pkl')
-featuresDf = pd.read_pickle('./dataset/featuresDF_1_LN.pkl')
+featuresDf = pd.read_pickle('./dataset/featuresDF_1.pkl')
 featuresDf['fourier_mfcc'] = [np.concatenate([featuresDf.fourier[i],
                               featuresDf.mfcc[i]]) for i in range(len(featuresDf))]
 # featuresDf.drop(columns=['sound', 'fourier', 'mfcc'], inplace=True)

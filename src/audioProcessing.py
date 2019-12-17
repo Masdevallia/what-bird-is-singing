@@ -95,8 +95,8 @@ def featuresPipeline(filespath, stage):
     DFBalanced = DF.groupby('class')
     DFBalanced = pd.DataFrame(DFBalanced.apply(
                      lambda x: x.sample(DFBalanced.size().min()).reset_index(drop=True)))
-    # DFBalanced.to_pickle(f'./dataset/featuresDF_{stage}_balanced_LN.pkl')
-    DF.to_pickle(f'./dataset/featuresDF_{stage}_LN.pkl')
+    # DFBalanced.to_pickle(f'./dataset/featuresDF_{stage}_balanced.pkl')
+    DF.to_pickle(f'./dataset/featuresDF_{stage}.pkl')
     # return DFBalanced
     return DF
 
@@ -143,5 +143,5 @@ def testFeaturesPipeline(filespath, filename):
             # DF = DF[['class','id','sound','fourier','mfcc']]
             DF = DF[['fourier','mfcc']]
             # DF['fourier_mfcc'] = [np.concatenate([DF.fourier[i], DF.mfcc[i]]) for i in range(len(DF))]
-            DF.to_pickle(f'./dataset/featuresDF_test_LN.pkl')
+            DF.to_pickle(f'./dataset/featuresDF_test.pkl')
             return DF

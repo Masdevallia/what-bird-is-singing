@@ -10,9 +10,7 @@ from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 
-# featuresDf = pd.read_pickle('./dataset/featuresDF.pkl')
-# featuresDf = pd.read_pickle('./dataset/featuresDF_2.pkl')
-featuresDf = pd.read_pickle('./dataset/featuresDF_1_LN.pkl')
+featuresDf = pd.read_pickle('./dataset/featuresDF_1.pkl')
 
 #.......................................................................................
 
