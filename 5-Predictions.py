@@ -14,8 +14,8 @@ def main():
     filename = sys.argv[1]
 
     # Audio processing:
-    subprocess.run(['sh','./src/testAudioProcessing.sh', filename])
-    testFeaturesDf = testFeaturesPipeline('./dataset/test/converted', filename)
+    subprocess.run(['sh','./src/testAudioProcessing.sh', filename])   
+    testFeaturesDf = testFeaturesPipeline('./application/uploaded/converted', filename)
 
     # Preparing data:
     testFeaturesDf['fourier_mfcc'] = [np.concatenate([testFeaturesDf.fourier[i],
