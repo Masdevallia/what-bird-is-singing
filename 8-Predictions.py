@@ -15,7 +15,7 @@ filename = sys.argv[1]
 # Audio processing:
 subprocess.run(['sh','./src/testAudioProcessing.sh', filename])
 testFeaturesDf = testFeaturesPipeline('./dataset/test/converted/lp_ng', filename)
-# testFeaturesDf = pd.read_pickle('./dataset/featuresDF_test_LN.pkl')
+## testFeaturesDf = pd.read_pickle('./dataset/featuresDF_test_LN.pkl')
 
 # Preparing data:
 testFeaturesDf['fourier_mfcc'] = [np.concatenate([testFeaturesDf.fourier[i],
