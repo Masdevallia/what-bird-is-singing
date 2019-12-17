@@ -1,0 +1,22 @@
+
+* {
+    margin-left: 20px;
+    padding: 0;
+    font-family: sans-serif;
+    font-weight: 100;
+    text-align: left
+}
+
+body {
+    padding: 50px 0;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+.tableauPlaceholder {
+    margin-left: 20px;    
+    margin-right: 20px;   
+    width: 60%;
+}
