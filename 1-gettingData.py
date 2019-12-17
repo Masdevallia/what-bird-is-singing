@@ -11,10 +11,10 @@ def main():
     speciesArray = ['European Robin', 'Iberian Green Woodpecker', 'Little Egret', 'Northern Raven']
     df_selected = selectSpecies(speciesArray, df, 1)
   
-    # Stage 2: 9 species:
+    # Stage 2: 10 species:
     speciesArray = ['European Robin', 'Common Cuckoo', 'European Greenfinch', 'Black-winged Kite',
                     'European Serin', 'Iberian Green Woodpecker', 'Little Egret', 'Little Owl',
-                    'Northern Raven']
+                    'Northern Raven', 'Western Barn Owl']
     df_selected = selectSpecies(speciesArray, df, 2)
     
 

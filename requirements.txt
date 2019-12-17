@@ -1,0 +1,24 @@
+
+# collections
+Flask==1.1.1
+json5==0.8.4
+Keras==2.3.1
+# Keras-Applications==1.0.8
+# Keras-Preprocessing==1.1.0
+librosa==0.7.1
+matplotlib==3.1.0
+numpy==1.16.4
+# os
+pandas==0.24.2
+pydub==0.23.1
+# re
+requests==2.22.0
+scipy==1.2.1
+# shutil
+sklearn==0.0
+# subprocess
+# sys
+# tensorflow==2.0.0
+urllib3==1.24.2
+# webbrowser
+Werkzeug==0.15.4
