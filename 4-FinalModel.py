@@ -11,11 +11,12 @@ def main():
     
     # Stage 1: 4 species:
     featuresDf = pd.read_pickle('./dataset/featuresDF_1.pkl')
+    X, y = dataPreparationFinal(featuresDf, 4)
 
     # Stage 2: 10 species:
     featuresDf = pd.read_pickle('./dataset/featuresDF_2.pkl')
+    X, y = dataPreparationFinal(featuresDf, 10)
 
-    X, y = dataPreparationFinal(featuresDf, 4)
     input_shape = (12, 32, 1)
 
     #...............................................................................
