@@ -6,7 +6,7 @@ from keras.optimizers import Adam
 from keras.layers.normalization import BatchNormalization
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 from sklearn import metrics
-from src.cnnTraining import dataPreparation, accuracyPlot, lossPlot
+from src.cnnTraining import *
 
 
 def main():
@@ -70,10 +70,10 @@ def main():
     # loss: 0.1986 - accuracy: 0.9277 - val_loss: 0.1403 - val_accuracy: 0.9553
 
     # Stage 2: 10 species:
-    # Test loss:
-    # Test accuracy: 
-    # Epoch .../2500:
-    # loss: ... - accuracy: ... - val_loss: ... - val_accuracy: ...
+    # Test loss: 0.3584835588640572
+    # Test accuracy: 0.8810513615608215 
+    # Epoch 2474/2500:
+    # loss: 0.5333 - accuracy: 0.8121 - val_loss: 0.3569 - val_accuracy: 0.8814
 
     #...............................................................................
 

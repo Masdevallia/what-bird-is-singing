@@ -32,7 +32,7 @@ def dataPreparationFinal(featuresDf, numberClasses):
     # Mapping the string class values to integer values using a LabelEncoder.
     lb = LabelEncoder()
     y = np_utils.to_categorical(lb.fit_transform(y))
-    np.save(f'../models/classes{numberClasses}.npy', lb.classes_)
+    np.save(f'./models/classes{numberClasses}.npy', lb.classes_)
     X = X.reshape(-1, 12, 32, 1)
     return X, y
 
@@ -46,7 +46,7 @@ def accuracyPlot(history, numberClasses):
     plt.xlabel('Epoch')
     plt.legend(['Train', 'Test'], loc='upper left')
     # plt.show()
-    plt.savefig(f'../charts/cnn_accuracy_{numberClasses}classes.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'./charts/cnn_accuracy_{numberClasses}classes.png', dpi=300, bbox_inches='tight')
 
 
 def lossPlot(history, numberClasses):
@@ -58,4 +58,4 @@ def lossPlot(history, numberClasses):
     plt.xlabel('Epoch')
     plt.legend(['Train', 'Test'], loc='upper left')
     # plt.show()
-    plt.savefig(f'../charts/cnn_lossvalues_{numberClasses}classes.png', dpi=300, bbox_inches='tight')
+    plt.savefig(f'./charts/cnn_lossvalues_{numberClasses}classes.png', dpi=300, bbox_inches='tight')
