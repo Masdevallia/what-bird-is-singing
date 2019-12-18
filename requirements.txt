@@ -1,6 +1,7 @@
 
 # collections
 Flask==1.1.1
+# itertools 
 json5==0.8.4
 Keras==2.3.1
 # Keras-Applications==1.0.8
