@@ -5,9 +5,16 @@ from sklearn.model_selection import train_test_split
 from keras.utils import np_utils
 from sklearn.preprocessing import LabelEncoder
 import matplotlib.pyplot as plt
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Dropout, Activation
+from keras.optimizers import Adam
+from keras.layers.normalization import BatchNormalization
+from keras.callbacks import ModelCheckpoint, EarlyStopping
+from sklearn import metrics
 
 
 def dataPreparation(featuresDf):
+    print('Preparing the database') 
     featuresDf['fourier_mfcc'] = [np.concatenate([featuresDf.fourier[i],
                                  featuresDf.mfcc[i]]) for i in range(len(featuresDf))]
     df_t, df_val = train_test_split(featuresDf, test_size=0.2) # random_state=42
@@ -25,6 +32,7 @@ def dataPreparation(featuresDf):
 
 
 def dataPreparationFinal(featuresDf, numberClasses):
+    print('Preparing the database') 
     featuresDf['fourier_mfcc'] = [np.concatenate([featuresDf.fourier[i],
                                  featuresDf.mfcc[i]]) for i in range(len(featuresDf))]
     X = np.array(featuresDf['fourier_mfcc'].tolist())
@@ -59,3 +67,47 @@ def lossPlot(history, numberClasses):
     plt.legend(['Train', 'Test'], loc='upper left')
     # plt.show()
     plt.savefig(f'./charts/cnn_lossvalues_{numberClasses}classes.png', dpi=300, bbox_inches='tight')
+
+
+def cnnBuildingStage1(X, y, val_x, val_y, input_shape, num_filters, filter_size, pool_size, batch_size, epochs):
+    print('Building the Neural Network')
+    filepath='./models/cnn_checkpoint_{epoch:02d}_{val_loss:.2f}.hdf5'
+    checkpointer = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True) # mode='max'
+    # earlystopper = EarlyStopping(monitor='val_loss', patience=15, verbose=1)
+    # callbacks_list=[checkpointer, earlystopper]
+    callbacks_list=[checkpointer]
+    num_labels = y.shape[1]       
+    model = Sequential()
+    model.add(Conv2D(num_filters, filter_size, input_shape=input_shape,
+                    strides=2, padding='same', activation='relu'))
+    model.add(Conv2D(num_filters, filter_size))
+    model.add(BatchNormalization())
+    model.add(MaxPooling2D(pool_size=pool_size))
+    model.add(Dropout(0.5))
+    model.add(Flatten())
+    model.add(Dense(64))
+    model.add(Activation('relu'))
+    model.add(Dense(num_labels))
+    model.add(Activation('softmax'))
+    # Compile the model:
+    model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='adam')
+    # Train the model:
+    print('Training the Neural Network')
+    history = model.fit(X, y, batch_size=batch_size, epochs=epochs, validation_data=(val_x, val_y),
+                    callbacks=callbacks_list)
+    print('Model trained')
+    score = model.evaluate(val_x, val_y, verbose=0)
+    print('Test loss:', score[0])
+    print('Test accuracy:', score[1])
+    # Save the to disk so we can load it back up anytime:
+    # Save model weights and architecture together:
+    model.save('./models/cnn_model_epoch2500_loss0.15_accuracy0.95.h5')
+    # Serialize model architecture to JSON
+    model_json = model.to_json()
+    with open("./models/cnn_model_epoch2500_loss0.15_accuracy0.95.json", "w") as json_file:
+        json_file.write(model_json)
+    # Serialize weights to HDF5/H5
+    model.save_weights("./models/cnn_model_epoch2500_loss0.15_accuracy0.95_weights.h5")
+    print('Model saved')
+    return history
+
