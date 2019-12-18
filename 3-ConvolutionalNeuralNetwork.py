@@ -43,16 +43,21 @@ def main():
     batch_size = 536
     epochs = 500
 
-    history = cnnBuildingStage2(X, y, val_x, val_y, input_shape,
+    history, model, n_classes = cnnBuildingStage2(X, y,
+                                val_x, val_y,
+                                input_shape,
                                 num_filters, filter_size, pool_size,
                                 batch_size, epochs)
 
-    # Test loss: 0.3584835588640572
-    # Test accuracy: 0.8810513615608215 
-    # Epoch 2474/2500:
-    # loss: 0.5333 - accuracy: 0.8121 - val_loss: 0.3569 - val_accuracy: 0.8814
+    # Test loss: 0.18736894733311202
+    # Test accuracy: 0.9449877738952637 
+    # Epoch 498/500:
+    # loss: 0.1648 - accuracy: 0.9415 - val_loss: 0.1641 - val_accuracy: 0.9478
 
     #...............................................................................
+
+    # ROC Curve:
+    multiclassROCcurve(model, val_x, val_y, n_classes)
 
     # Evaluating overfitting:
     accuracyPlot(history, 4)

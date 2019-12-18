@@ -11,6 +11,9 @@ from keras.optimizers import Adam
 from keras.layers.normalization import BatchNormalization
 from keras.callbacks import ModelCheckpoint, EarlyStopping
 from sklearn import metrics
+from scipy import interp
+from itertools import cycle
+from sklearn.metrics import roc_curve, auc
 
 
 def dataPreparation(featuresDf):
@@ -53,6 +56,91 @@ def lossPlot(history, numberClasses):
     plt.legend(['Train', 'Test'], loc='upper left')
     # plt.show()
     plt.savefig(f'./charts/cnn_lossvalues_{numberClasses}classes.png', dpi=300, bbox_inches='tight')
+
+
+def multiclassROCcurve(model, val_x, val_y, n_classes):
+    # ROC Curve:
+    # Make prediction for test inputs
+    y_score = model.predict(val_x)
+    # Plot ROC for each of the 'n' classes
+    # Using micro and marco averaging to evaluate the overall performance across all classes. 
+    # Plot linewidth.
+    lw = 2
+    # Compute ROC curve and ROC area for each class
+    fpr = dict()
+    tpr = dict()
+    roc_auc = dict()
+    for i in range(n_classes):
+        fpr[i], tpr[i], _ = roc_curve(val_y[:, i], y_score[:, i])
+        roc_auc[i] = auc(fpr[i], tpr[i])
+    # Compute micro-average ROC curve and ROC area
+    fpr["micro"], tpr["micro"], _ = roc_curve(val_y.ravel(), y_score.ravel())
+    roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+    # Compute macro-average ROC curve and ROC area
+    # First aggregate all false positive rates
+    all_fpr = np.unique(np.concatenate([fpr[i] for i in range(n_classes)]))
+    # Then interpolate all ROC curves at this points
+    mean_tpr = np.zeros_like(all_fpr)
+    for i in range(n_classes):
+        mean_tpr += interp(all_fpr, fpr[i], tpr[i])
+    # Finally average it and compute AUC
+    mean_tpr /= n_classes
+    fpr["macro"] = all_fpr
+    tpr["macro"] = mean_tpr
+    roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
+    # Plot all ROC curves
+    plt.figure(1)
+    plt.plot(fpr["micro"], tpr["micro"],
+            label='micro-average ROC curve (area = {0:0.2f})'
+                ''.format(roc_auc["micro"]),
+            color='deeppink', linestyle=':', linewidth=4)
+
+    plt.plot(fpr["macro"], tpr["macro"],
+            label='macro-average ROC curve (area = {0:0.2f})'
+                ''.format(roc_auc["macro"]),
+            color='navy', linestyle=':', linewidth=4)
+
+    colors = cycle(['aqua', 'darkorange', 'cornflowerblue', 'red', 'green',
+                    'pink', 'tomato','grey', 'blue', 'yellow'])
+    for i, color in zip(range(n_classes), colors):
+        plt.plot(fpr[i], tpr[i], color=color, lw=lw,
+                label='ROC curve of class {0} (area = {1:0.2f})'
+                ''.format(i, roc_auc[i]))
+    plt.plot([0, 1], [0, 1], 'k--', lw=lw)
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Multi-class ROC Curve')
+    plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.5))
+    plt.savefig(f'./charts/ROCcurve{n_classes}classes.png', dpi=300, bbox_inches='tight')
+    # Zoom in view of the upper left corner.
+    plt.figure(2)
+    plt.xlim(0, 0.2)
+    plt.ylim(0.8, 1)
+    plt.plot(fpr["micro"], tpr["micro"],
+            label='micro-average ROC curve (area = {0:0.2f})'
+                ''.format(roc_auc["micro"]),
+            color='deeppink', linestyle=':', linewidth=4)
+
+    plt.plot(fpr["macro"], tpr["macro"],
+            label='macro-average ROC curve (area = {0:0.2f})'
+                ''.format(roc_auc["macro"]),
+            color='navy', linestyle=':', linewidth=4)
+
+    colors = cycle(['aqua', 'darkorange', 'cornflowerblue', 'red', 'green',
+                    'pink', 'tomato','grey', 'blue', 'yellow'])
+    for i, color in zip(range(n_classes), colors):
+        plt.plot(fpr[i], tpr[i], color=color, lw=lw,
+                label='ROC curve of class {0} (area = {1:0.2f})'
+                ''.format(i, roc_auc[i]))
+
+    plt.plot([0, 1], [0, 1], 'k--', lw=lw)
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Multi-class ROC Curve')
+    plt.legend(loc='center left', bbox_to_anchor=(1.1, 0.5))
+    plt.savefig(f'./charts/ROCcurve{n_classes}classes_zoomin.png', dpi=300, bbox_inches='tight')
 
 
 def cnnBuildingStage1(X, y, val_x, val_y, input_shape, num_filters, filter_size, pool_size, batch_size, epochs):
@@ -129,13 +217,14 @@ def cnnBuildingStage2(X, y, val_x, val_y, input_shape, num_filters, filter_size,
     print('Test accuracy:', score[1])
     # Save the to disk so we can load it back up anytime:
     # Save model weights and architecture together:
-    model.save('./models/stage2_cnn_model_epoch2500.h5')
+    model.save(f'./models/stage2_cnn_model_epoch{epochs}.h5')
     # Serialize model architecture to JSON
     model_json = model.to_json()
-    with open("./models/stage2_cnn_model_epoch2500.json", "w") as json_file:
+    with open(f"./models/stage2_cnn_model_epoch{epochs}.json", "w") as json_file:
         json_file.write(model_json)
     # Serialize weights to HDF5/H5
-    model.save_weights("./models/stage2_cnn_model_epoch2500_weights.h5")
+    model.save_weights(f"./models/stage2_cnn_model_epoch{epochs}_weights.h5")
     print('Model saved')
-    return history
+    # return history
+    return history, model, num_labels
     
