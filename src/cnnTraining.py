@@ -111,3 +111,45 @@ def cnnBuildingStage1(X, y, val_x, val_y, input_shape, num_filters, filter_size,
     print('Model saved')
     return history
 
+
+def cnnBuildingStage2(X, y, val_x, val_y, input_shape, num_filters, filter_size, pool_size, batch_size, epochs):
+    print('Building the Neural Network')
+    filepath='./models/stage2_cnn_checkpoint_{epoch:02d}_{val_loss:.2f}.hdf5'
+    checkpointer = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True) # mode='max'
+    callbacks_list=[checkpointer]
+    num_labels = y.shape[1]
+    model = Sequential()
+    model.add(Conv2D(num_filters, filter_size, input_shape=input_shape,
+                    strides=2, padding='same', activation='relu'))
+    model.add(Conv2D(num_filters, filter_size))
+    model.add(BatchNormalization())
+    model.add(Conv2D(num_filters, filter_size))
+    model.add(MaxPooling2D(pool_size=pool_size))
+    model.add(Dropout(0.5))
+    model.add(Flatten())
+    model.add(Dense(64))
+    model.add(Activation('relu'))
+    model.add(Dense(num_labels))
+    model.add(Activation('softmax'))
+    # Compile the model:
+    model.compile(loss='categorical_crossentropy', metrics=['accuracy'], optimizer='adam')
+    # Train the model:
+    print('Training the Neural Network')
+    history = model.fit(X, y, batch_size=batch_size, epochs=epochs, validation_data=(val_x, val_y),
+                    callbacks=callbacks_list)
+    print('Model trained')
+    score = model.evaluate(val_x, val_y, verbose=0)
+    print('Test loss:', score[0])
+    print('Test accuracy:', score[1])
+    # Save the to disk so we can load it back up anytime:
+    # Save model weights and architecture together:
+    model.save('./models/stage2_cnn_model_epoch2500.h5')
+    # Serialize model architecture to JSON
+    model_json = model.to_json()
+    with open("./models/stage2_cnn_model_epoch2500.json", "w") as json_file:
+        json_file.write(model_json)
+    # Serialize weights to HDF5/H5
+    model.save_weights("./models/stage2_cnn_model_epoch2500_weights.h5")
+    print('Model saved')
+    return history
+    
