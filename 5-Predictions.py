@@ -26,7 +26,8 @@ def main():
     #...............................................................................
 
     # Load trained model:
-    loaded_model = load_model('./models/cnn_model_final.h5')
+    # loaded_model = load_model('./models/cnn_model_final.h5') # 4 species
+    loaded_model = load_model('./models/cnn_model_final_stage2.h5') # 10 species
 
     # Class Predictions:
     ynew = loaded_model.predict_classes(X)
@@ -34,7 +35,8 @@ def main():
     # Using the LabelEncoder to convert the integers back into string values via
     # the inverse_transform() function.
     encoder = LabelEncoder()
-    encoder.classes_ = np.load('./models/classes4.npy')
+    # encoder.classes_ = np.load('./models/classes4.npy') # 4 species
+    encoder.classes_ = np.load('./models/classes10.npy') # 10 species
 
     # Counting how many times each species appears in the predictions:
     windowPredictions = Counter(ynew)
