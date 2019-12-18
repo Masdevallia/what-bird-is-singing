@@ -31,20 +31,6 @@ def dataPreparation(featuresDf):
     return X, y, val_x, val_y
 
 
-def dataPreparationFinal(featuresDf, numberClasses):
-    print('Preparing the database') 
-    featuresDf['fourier_mfcc'] = [np.concatenate([featuresDf.fourier[i],
-                                 featuresDf.mfcc[i]]) for i in range(len(featuresDf))]
-    X = np.array(featuresDf['fourier_mfcc'].tolist())
-    y = np.array(featuresDf['class'].tolist())
-    # Mapping the string class values to integer values using a LabelEncoder.
-    lb = LabelEncoder()
-    y = np_utils.to_categorical(lb.fit_transform(y))
-    np.save(f'./models/classes{numberClasses}.npy', lb.classes_)
-    X = X.reshape(-1, 12, 32, 1)
-    return X, y
-
-
 def accuracyPlot(history, numberClasses):
     # Plot training & validation accuracy values
     plt.plot(history.history['accuracy'])

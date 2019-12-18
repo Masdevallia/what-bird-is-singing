@@ -7,10 +7,10 @@ def main():
 
     # Preparing the database 
 
-    # Stage 1:
+    # Stage 1: 4 species:
     featuresDf = pd.read_pickle('./dataset/featuresDF_1.pkl')
 
-    # Stage 2:
+    # Stage 2: 10 species:
     featuresDf = pd.read_pickle('./dataset/featuresDF_2.pkl')
 
     X, y, val_x, val_y = dataPreparation(featuresDf)
