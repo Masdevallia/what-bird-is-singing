@@ -57,3 +57,39 @@ def finalCnnStage1(X, y, input_shape, num_filters, filter_size, pool_size, batch
     print('Model saved')
     return history
 
+
+def finalCnnStage2(X, y, input_shape, num_filters, filter_size, pool_size, batch_size, epochs):
+    print('Building the Neural Network')
+    num_labels = y.shape[1]
+    model = Sequential()
+    model = Sequential()
+    model.add(Conv2D(num_filters, filter_size, input_shape=input_shape,
+                    strides=2, padding='same', activation='relu'))
+    model.add(Conv2D(num_filters, filter_size))
+    model.add(BatchNormalization())
+    model.add(Conv2D(num_filters, filter_size))
+    model.add(MaxPooling2D(pool_size=pool_size))
+    model.add(Dropout(0.5))
+    model.add(Flatten())
+    model.add(Dense(64))
+    model.add(Activation('relu'))
+    model.add(Dense(num_labels))
+    model.add(Activation('softmax'))
+    # Compile the model:
+    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    # Train the model:
+    print('Training the Neural Network')
+    history = model.fit(X, y, batch_size=batch_size, epochs=epochs)
+    print('Model trained')   
+    # Save the to disk so we can load it back up anytime:
+    # Save model weights and architecture together:
+    model.save('./models/cnn_model_final_stage2.h5')
+    # Serialize model architecture to JSON
+    model_json = model.to_json()
+    with open("./models/cnn_model_final_stage2.json", "w") as json_file:
+        json_file.write(model_json)
+    # Serialize weights to HDF5/H5
+    model.save_weights("./models/cnn_model_final_stage2_weights.h5")
+    print('Model saved')
+    return history
+

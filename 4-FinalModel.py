@@ -2,7 +2,7 @@
 # Final model with all the dataset:
 
 import pandas as pd
-from src.cnnFinal import dataPreparationFinal, finalCnnStage1
+from src.cnnFinal import *
 
 
 def main():
@@ -28,11 +28,17 @@ def main():
     pool_size = 2
     batch_size = 500
     epochs = 2500
-    finalCnnStage1(X, y, input_shape,
-                   num_filters, filter_size, pool_size, batch_size, epochs)
+    history = finalCnnStage1(X, y, input_shape, 
+                            num_filters, filter_size, pool_size, batch_size, epochs)
 
     # Stage 2: 10 species:
-
+    num_filters = 64
+    filter_size = 3
+    pool_size = 2
+    batch_size = 536
+    epochs = 500
+    history = finalCnnStage2(X, y, input_shape,
+                            num_filters, filter_size, pool_size, batch_size, epochs)
     
 
 if __name__=="__main__":
