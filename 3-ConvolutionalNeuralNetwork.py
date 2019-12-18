@@ -13,7 +13,8 @@ def main():
 
     print('Preparing the database')
     
-    featuresDf = pd.read_pickle('./dataset/featuresDF_1.pkl')
+    # featuresDf = pd.read_pickle('./dataset/featuresDF_1.pkl')
+    featuresDf = pd.read_pickle('./dataset/featuresDF_2.pkl')
     X, y, val_x, val_y = dataPreparation(featuresDf)
     input_shape = (12, 32, 1)
 
@@ -21,7 +22,9 @@ def main():
 
     print('Building the Neural Network')
 
-    filepath='./models/cnn_checkpoint_{epoch:02d}_{val_loss:.2f}.hdf5'
+    # filepath='./models/cnn_checkpoint_{epoch:02d}_{val_loss:.2f}.hdf5'
+    filepath='./models/stage2_cnn_checkpoint_{epoch:02d}_{val_loss:.2f}.hdf5'
+
     checkpointer = ModelCheckpoint(filepath, monitor='val_loss', verbose=1, save_best_only=True) # mode='max'
     # earlystopper = EarlyStopping(monitor='val_loss', patience=15, verbose=1)
     # callbacks_list=[checkpointer, earlystopper]
@@ -59,30 +62,42 @@ def main():
     score = model.evaluate(val_x, val_y, verbose=0)
     print('Test loss:', score[0])
     print('Test accuracy:', score[1])
+
+    # Stage 1: 4 species:
     # Test loss: 0.1545419144080981
     # Test accuracy: 0.9516493678092957
-
     # Epoch 2488/2500:
     # loss: 0.1986 - accuracy: 0.9277 - val_loss: 0.1403 - val_accuracy: 0.9553
+
+    # Stage 2: 10 species:
+    # Test loss:
+    # Test accuracy: 
+    # Epoch .../2500:
+    # loss: ... - accuracy: ... - val_loss: ... - val_accuracy: ...
 
     #...............................................................................
 
     # Save the to disk so we can load it back up anytime:
     # Save model weights and architecture together:
-    model.save('./models/cnn_model_epoch2500_loss0.15_accuracy0.95.h5')
+    # model.save('./models/cnn_model_epoch2500_loss0.15_accuracy0.95.h5')
+    model.save('./models/stage2_cnn_model_epoch2500.h5')
     # Serialize model architecture to JSON
     model_json = model.to_json()
-    with open("./models/cnn_model_epoch2500_loss0.15_accuracy0.95.json", "w") as json_file:
-        json_file.write(model_json)
+    # with open("./models/cnn_model_epoch2500_loss0.15_accuracy0.95.json", "w") as json_file:
+    with open("./models/stage2_cnn_model_epoch2500.json", "w") as json_file:
+        json_file.write(model_json)    
     # Serialize weights to HDF5/H5
-    model.save_weights("./models/cnn_model_epoch2500_loss0.15_accuracy0.95_weights.h5")
+    # model.save_weights("./models/cnn_model_epoch2500_loss0.15_accuracy0.95_weights.h5")
+    model.save_weights("./models/stage2_cnn_model_epoch2500_weights.h5")
     print('Model saved')
 
     #...............................................................................
 
     # Evaluating overfitting:
-    accuracyPlot(history, 4)
-    lossPlot(history, 4)
+    # accuracyPlot(history, 4)
+    # lossPlot(history, 4)
+    accuracyPlot(history, 10)
+    lossPlot(history, 10)
 
 
 if __name__=="__main__":
