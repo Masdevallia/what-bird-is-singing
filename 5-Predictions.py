@@ -17,39 +17,44 @@ def main():
     subprocess.run(['sh','./src/testAudioProcessing.sh', filename])   
     testFeaturesDf = testFeaturesPipeline('./application/uploaded/converted', filename)
 
-    # Preparing data:
-    testFeaturesDf['fourier_mfcc'] = [np.concatenate([testFeaturesDf.fourier[i],
-                                testFeaturesDf.mfcc[i]]) for i in range(len(testFeaturesDf))]
-    X = np.array(testFeaturesDf['fourier_mfcc'].tolist())
-    X = X.reshape(-1, 12, 32, 1)
+    if len(testFeaturesDf) == 0:
+        answer = './application/output/error.html'
+        chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
+        webbrowser.get(chrome_path).open(answer, 0)
+    else:
+        # Preparing data:
+        testFeaturesDf['fourier_mfcc'] = [np.concatenate([testFeaturesDf.fourier[i],
+                                    testFeaturesDf.mfcc[i]]) for i in range(len(testFeaturesDf))]
+        X = np.array(testFeaturesDf['fourier_mfcc'].tolist())
+        X = X.reshape(-1, 12, 32, 1)
 
-    #...............................................................................
+        #...............................................................................
 
-    # Load trained model:
-    # loaded_model = load_model('./models/cnn_model_final.h5') # 4 species
-    loaded_model = load_model('./models/cnn_model_final_stage2.h5') # 10 species
+        # Load trained model:
+        # loaded_model = load_model('./models/cnn_model_final.h5') # 4 species
+        loaded_model = load_model('./models/cnn_model_final_stage2.h5') # 10 species
 
-    # Class Predictions:
-    ynew = loaded_model.predict_classes(X)
+        # Class Predictions:
+        ynew = loaded_model.predict_classes(X)
 
-    # Using the LabelEncoder to convert the integers back into string values via
-    # the inverse_transform() function.
-    encoder = LabelEncoder()
-    # encoder.classes_ = np.load('./models/classes4.npy') # 4 species
-    encoder.classes_ = np.load('./models/classes10.npy') # 10 species
+        # Using the LabelEncoder to convert the integers back into string values via
+        # the inverse_transform() function.
+        encoder = LabelEncoder()
+        # encoder.classes_ = np.load('./models/classes4.npy') # 4 species
+        encoder.classes_ = np.load('./models/classes10.npy') # 10 species
 
-    # Counting how many times each species appears in the predictions:
-    windowPredictions = Counter(ynew)
-    # Returning the species that appears more times:
-    max_key = max(windowPredictions, key=lambda x: windowPredictions[x])
-    finalPrediction = encoder.inverse_transform([max_key])[0]
+        # Counting how many times each species appears in the predictions:
+        windowPredictions = Counter(ynew)
+        # Returning the species that appears more times:
+        max_key = max(windowPredictions, key=lambda x: windowPredictions[x])
+        finalPrediction = encoder.inverse_transform([max_key])[0]
 
-    #...............................................................................
+        #...............................................................................
 
-    # Giving the answer:
-    answer = f'./application/output/{finalPrediction}.html'
-    chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
-    webbrowser.get(chrome_path).open(answer, 0)
+        # Giving the answer:
+        answer = f'./application/output/{finalPrediction}.html'
+        chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
+        webbrowser.get(chrome_path).open(answer, 0)
 
 
 if __name__=="__main__":
