@@ -18,7 +18,7 @@ Bringing technology closer to biologists needs.
 ### STEP 2: Obtaining the database
 The database (consistent of 14509 audios for 317 species) was obtained from the [Xeno-Canto API](https://www.xeno-canto.org/explore/api).
 
-I selected 10 of them for my project.
+As a first approximation, I selected 10 of this species for my project.
 
 ### STEP 3: Audio processing
 - Low pass filter.
