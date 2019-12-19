@@ -19,15 +19,16 @@ Bringing technology closer to biologists needs.
 The database (consistent of 14509 audios for 317 species) was obtained from the [Xeno-Canto API](https://www.xeno-canto.org/explore/api).
 
 ### STEP 3: Audio processing
-- Low pass filter
-- Noise gata
-- Split on silence: separate out silent chunks
+- Low pass filter.
+- Noise gata.
+- Split on silence: separate out silent chunks.
 - Split each remaining chunk into 1 second windows overlapping by 50%.
 - Calculate Fourier coefficients for each window.
 - Determine the average value of each mfcc coefficient for each window.
 
 ### STEP 4: Model building (training and evaluation)
 Tryed: Sklearn classifiers (random forest, gradient boosting, ...) and neural networks.
+
 Best performance: Convolutional neural network with 2D convolutional layers and MaxPooling2D (validation accuracy = 0.95).
 
 ### STEP 5: Web application and deployment
