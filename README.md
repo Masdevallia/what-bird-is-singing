@@ -34,8 +34,8 @@ Tryed: Sklearn classifiers (random forest, gradient boosting, ...) and neural ne
 Best performance: Convolutional neural network with 2D convolutional layers and MaxPooling2D (validation accuracy = 0.95).
 
 ### STEP 5: Web application and deployment
-- Developed with Flask .
-- Deployed online with Pythonanywhere.
+- Developed with Flask.
+- Deployed online with Pythonanywhere: http://masdevallia.pythonanywhere.com/.
 
 ### Future steps:
 - 'Others' category.
