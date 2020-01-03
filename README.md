@@ -28,10 +28,14 @@ As a first approximation, I selected 10 of this species for my project.
 - Calculate Fourier coefficients for each window.
 - Determine the average value of each mfcc coefficient for each window.
 
+<p align="center"><img  src="https://raw.githubusercontent.com/Masdevallia/what-bird-is-singing/master/images/audioproc.png" width="700"></p>
+
 ### STEP 4: Model building (training and evaluation)
 Tryed: Sklearn classifiers (random forest, gradient boosting, ...) and neural networks.
 
 Best performance: Convolutional neural network with 2D convolutional layers and MaxPooling2D (validation accuracy = 0.95).
+
+<p align="center"><img  src="https://raw.githubusercontent.com/Masdevallia/what-bird-is-singing/master/images/model.png" width="700"></p>
 
 ### STEP 5: Web application and deployment
 - Developed with Flask.
